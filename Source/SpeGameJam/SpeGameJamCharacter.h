@@ -34,7 +34,7 @@ public:
 
 protected:
 	virtual void BeginPlay();
-
+	virtual void Tick(float DeltaTime) override;
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
@@ -73,6 +73,9 @@ protected:
 	void OnSoundLess();
 	//Raycasts
 	void OnBrigthness();
+	bool brig = false;
+	void Pressed() { brig = true; };
+	void Released() { brig = false; };
 
 
 	/** Resets HMD orientation and position in VR. */

@@ -91,8 +91,9 @@ void ASpeGameJamCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	// Bind fire event
 	PlayerInputComponent->BindAction("SoundLess", IE_Pressed, this, &ASpeGameJamCharacter::OnSoundLess);
 
-	// Bind fire event
-	PlayerInputComponent->BindAction("Brigthness", IE_Pressed, this, &ASpeGameJamCharacter::OnBrigthness);
+	// Bind fire event	
+	PlayerInputComponent->BindAction("Brigthness", IE_Pressed, this, &ASpeGameJamCharacter::Pressed);
+	PlayerInputComponent->BindAction("Brigthness", IE_Released, this, &ASpeGameJamCharacter::Released);
 
 
 	// Enable touchscreen input
@@ -167,7 +168,7 @@ void ASpeGameJamCharacter::OnSoundLess()
 	Controller->GetPlayerViewPoint(CamLoc, CamRot);
 	const FVector StartTrace = CamLoc; // trace start is the camera location
 	const FVector Direction = CamRot.Vector();
-	const FVector EndTrace = StartTrace + Direction * 1000; // and trace end is the camera location + an offset in the direction you are looking, the 200 is the distance at wich it checks
+	const FVector EndTrace = StartTrace + Direction * 10000000; // and trace end is the camera location + an offset in the direction you are looking, the 200 is the distance at wich it checks
 	
 	// Perform trace to retrieve hit info
 	FCollisionQueryParams TraceParams(FName(TEXT("WeaponTrace")), true, this);
@@ -190,7 +191,7 @@ void ASpeGameJamCharacter::OnBrigthness()
 	Controller->GetPlayerViewPoint(CamLoc, CamRot);
 	const FVector StartTrace = CamLoc; // trace start is the camera location
 	const FVector Direction = CamRot.Vector();
-	const FVector EndTrace = StartTrace + Direction * 1000; // and trace end is the camera location + an offset in the direction you are looking, the 200 is the distance at wich it checks
+	const FVector EndTrace = StartTrace + Direction * 100000000; // and trace end is the camera location + an offset in the direction you are looking, the 200 is the distance at wich it checks
 
 	// Perform trace to retrieve hit info
 	FCollisionQueryParams TraceParams(FName(TEXT("WeaponTrace")), true, this);
@@ -316,4 +317,13 @@ bool ASpeGameJamCharacter::EnableTouchscreenMovement(class UInputComponent* Play
 	}
 	
 	return false;
+}
+
+void ASpeGameJamCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (brig)
+	{
+		OnBrigthness();
+	}
 }
