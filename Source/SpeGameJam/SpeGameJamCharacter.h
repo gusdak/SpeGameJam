@@ -69,8 +69,11 @@ protected:
 	/** Fires a projectile. */
 	void OnFire();
 
-	/** Fires a projectile. */
+	//Raycasts
 	void OnSoundLess();
+	//Raycasts
+	void OnBrigthness();
+
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();

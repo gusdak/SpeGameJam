@@ -88,6 +88,10 @@ void ASpeGameJamCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	// Bind fire event
 	PlayerInputComponent->BindAction("SoundLess", IE_Pressed, this, &ASpeGameJamCharacter::OnSoundLess);
 
+	// Bind fire event
+	PlayerInputComponent->BindAction("Brigthness", IE_Pressed, this, &ASpeGameJamCharacter::OnBrigthness);
+	);
+
 
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
@@ -169,9 +173,29 @@ void ASpeGameJamCharacter::OnSoundLess()
 	{
 		Hit.GetActor()->ReceiveAnyDamage(10, GetDefault<UDamageType>(), Controller, this);
 	}
-	const FName TraceTag("MyTraceTag");
+}
 
-	GetWorld()->DebugDrawTraceTag = FName(TEXT("WeaponTrace"));
+void ASpeGameJamCharacter::OnBrigthness()
+{
+	FVector CamLoc;
+	FRotator CamRot;
+	auto Controller = this->GetController();
+	Controller->GetPlayerViewPoint(CamLoc, CamRot);
+	const FVector StartTrace = CamLoc; // trace start is the camera location
+	const FVector Direction = CamRot.Vector();
+	const FVector EndTrace = StartTrace + Direction * 1000; // and trace end is the camera location + an offset in the direction you are looking, the 200 is the distance at wich it checks
+
+	// Perform trace to retrieve hit info
+	FCollisionQueryParams TraceParams(FName(TEXT("WeaponTrace")), true, this);
+	//TraceParams.bTraceAsyncScene = true;
+	TraceParams.bReturnPhysicalMaterial = false;
+
+	FHitResult Hit(ForceInit);
+	GetWorld()->LineTraceSingleByChannel(Hit, StartTrace, EndTrace, ECC_Visibility, TraceParams); // simple trace function
+	if (Hit.GetActor() != nullptr)
+	{
+		Hit.GetActor()->ReceiveAnyDamage(20, GetDefault<UDamageType>(), Controller, this);
+	}
 }
 
 void ASpeGameJamCharacter::OnResetVR()
