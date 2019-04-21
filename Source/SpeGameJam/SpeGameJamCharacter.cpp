@@ -131,15 +131,6 @@ void ASpeGameJamCharacter::OnFire()
 			{
 				UE_LOG(LogTemp, Warning, TEXT("ALERT!ALERT!ALERT!ALERT!ALERT!ALERT!"));
 			}
-			DrawDebugSphere(
-				GetWorld(),
-				spawnLocation,
-				24,
-				32,
-				FColor(255, 0, 0), 
-				false,
-				20
-			);
 			//Set Spawn Collision Handling Override
 			FActorSpawnParameters ActorSpawnParams;
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
