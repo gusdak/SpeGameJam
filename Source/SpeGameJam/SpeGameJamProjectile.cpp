@@ -15,6 +15,7 @@ ASpeGameJamProjectile::ASpeGameJamProjectile()
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
+	CollisionComp->MoveIgnoreActors.Add(GetOwner());
 
 	// Set as root component
 	RootComponent = CollisionComp;

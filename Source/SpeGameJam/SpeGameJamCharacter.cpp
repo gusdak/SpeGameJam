@@ -12,6 +12,9 @@
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 #include "Components/StaticMeshComponent.h"
+#include "DrawDebugHelpers.h"
+#include "Engine/StaticMeshSocket.h"
+
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -90,7 +93,6 @@ void ASpeGameJamCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Brigthness", IE_Pressed, this, &ASpeGameJamCharacter::OnBrigthness);
-	);
 
 
 	// Enable touchscreen input
@@ -123,13 +125,27 @@ void ASpeGameJamCharacter::OnFire()
 			auto component = (UStaticMeshComponent*)this->GetComponentByClass(UStaticMeshComponent::StaticClass());
 			auto spawnLocation = component->GetSocketLocation(FName("Piu"));
 			auto spawnRotation = component->GetSocketRotation(FName("Piu"));
+			auto socket = component->GetSocketByName(FName("Piu"));
 			
+			if (socket == nullptr)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("ALERT!ALERT!ALERT!ALERT!ALERT!ALERT!"));
+			}
+			DrawDebugSphere(
+				GetWorld(),
+				spawnLocation,
+				24,
+				32,
+				FColor(255, 0, 0), 
+				false,
+				20
+			);
 			//Set Spawn Collision Handling Override
 			FActorSpawnParameters ActorSpawnParams;
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
 			// spawn the projectile at the muzzle
-			World->SpawnActor<ASpeGameJamProjectile>(ProjectileClass, spawnLocation, spawnRotation, ActorSpawnParams);
+			World->SpawnActor<ASpeGameJamProjectile>(ProjectileClass, spawnLocation, SpawnRotation, ActorSpawnParams);
 		}
 	}
 
